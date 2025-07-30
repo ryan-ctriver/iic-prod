@@ -1,0 +1,53 @@
+name: Create GitHub Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Version number (e.g. 1.4.5)"
+                required: true
+
+permissions:
+    contents: write
+
+jobs:
+    create-release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Configure Git user
+              run: |
+                  git config user.name "github-actions"
+                  git config user.email "github-actions@users.noreply.github.com"
+
+            - name: Push Git tag
+              env:
+                  PAT: ${{ secrets.GH_PAT }}
+              run: |
+                  git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}
+                  git tag ${{ github.event.inputs.version }}
+                  git push origin ${{ github.event.inputs.version }}
+
+            - name: Create GitHub Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  tag_name: ${{ github.event.inputs.version }}
+                  name: Release ${{ github.event.inputs.version }}
+                  body: "Automated release for version ${{ github.event.inputs.version }}"
+                  draft: false
+    purge-jsdelivr-cache:
+        needs: create-release
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Purge jsDelivr Cache
+              uses: egad13/purge-jsdelivr-cache@v1
+              with:
+                  url: |
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/build-map-filters.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/handle-query.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/init-data.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/process-locs.js
