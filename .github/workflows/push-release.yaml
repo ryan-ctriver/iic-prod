@@ -54,3 +54,4 @@ jobs:
                       https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-build-map.js
                       https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-init-data.js
                       https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-process-locs.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-handle-query.js
