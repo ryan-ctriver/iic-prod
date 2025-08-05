@@ -1,1 +1,101 @@
-(()=>{var l=i=>{let t,e=new Set,a=(s,d)=>{let n=typeof s=="function"?s(t):s;if(!Object.is(n,t)){let b=t;t=d??(typeof n!="object"||n===null)?n:Object.assign({},t,n),e.forEach(y=>y(t,b))}},o=()=>t,c={setState:a,getState:o,getInitialState:()=>S,subscribe:s=>(e.add(s),()=>e.delete(s))},S=t=i(a,o,c);return c},u=i=>i?l(i):l;window.__GLOBAL_DATA_STORE__||(window.__GLOBAL_DATA_STORE__=u((i,t)=>({sites:[],watersheds:[],waterbodies:[],organizations:[],states:[],counties:[],towns:[],boudaries:{},query:{},isBoundariesLoaded:!1,lang:"en",initialized:!1,accessibility:!1,setSites:e=>i(()=>({sites:e})),setQuery:e=>i(()=>({query:e})),setStates:e=>i(()=>({states:e})),setCounties:e=>i(()=>({counties:e})),setTowns:e=>i(()=>({towns:e})),setWaterSheds:e=>i(()=>({watersheds:e})),setWaterBodies:e=>i(()=>({waterbodies:e})),setOrganizations:e=>i(()=>({organizations:e})),setBoundaries:e=>i(()=>({boudaries:e})),setIsBoundariesLoaded:e=>i(()=>({isBoundariesLoaded:e})),setLang:e=>i(()=>({lang:e})),setInitialized:e=>i(()=>({initialized:e})),setAccessibility:e=>i(()=>({accessibility:e})),toggleAccessibility:()=>i(e=>({accessibility:!e.accessibility})),getSites:()=>t().sites,getWaterSheds:()=>t().watersheds,getWaterBodies:()=>t().waterbodies,getStates:()=>t().states,getCounties:()=>t().counties,getTowns:()=>t().towns,getOrganizations:()=>t().organizations,getBoundaries:()=>t().boudaries,getIsBoundariesLoaded:()=>t().isBoundariesLoaded,getLang:()=>t().lang,getQuery:()=>t().query,getInitialized:()=>t().initialized,getAccessibility:()=>t().accessibility})));var w=window.__GLOBAL_DATA_STORE__;var{setAccessibility:f}=w.getState(),g={accessibility:f};function r(){let t={accessibility:new URLSearchParams(window.location.search).get("accessibility")==="1"};Object.values(t).length>0&&Object.entries(t).forEach(([a,o])=>{g[a](o)})}window.dataInitialized?r():window.initQueries=r;})();
+(() => {
+  // bin/live-reload.js
+  new EventSource(`${"http://localhost:3002"}/esbuild`).addEventListener("change", () => location.reload());
+
+  // node_modules/zustand/esm/vanilla.mjs
+  var createStoreImpl = (createState) => {
+    let state;
+    const listeners = /* @__PURE__ */ new Set();
+    const setState = (partial, replace) => {
+      const nextState = typeof partial === "function" ? partial(state) : partial;
+      if (!Object.is(nextState, state)) {
+        const previousState = state;
+        state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+        listeners.forEach((listener) => listener(state, previousState));
+      }
+    };
+    const getState = () => state;
+    const getInitialState = () => initialState;
+    const subscribe = (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    };
+    const api = { setState, getState, getInitialState, subscribe };
+    const initialState = state = createState(setState, getState, api);
+    return api;
+  };
+  var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
+
+  // src/store/data-store.js
+  if (!window.__GLOBAL_DATA_STORE__) {
+    window.__GLOBAL_DATA_STORE__ = createStore((set, get) => ({
+      sites: [],
+      watersheds: [],
+      waterbodies: [],
+      organizations: [],
+      states: [],
+      counties: [],
+      towns: [],
+      boudaries: {},
+      query: {},
+      isBoundariesLoaded: false,
+      lang: "en",
+      initialized: false,
+      accessibility: false,
+      setSites: (sites) => set(() => ({ sites })),
+      setQuery: (query) => set(() => ({ query })),
+      setStates: (states) => set(() => ({ states })),
+      setCounties: (counties) => set(() => ({ counties })),
+      setTowns: (towns) => set(() => ({ towns })),
+      setWaterSheds: (watersheds) => set(() => ({ watersheds })),
+      setWaterBodies: (waterbodies) => set(() => ({ waterbodies })),
+      setOrganizations: (organizations) => set(() => ({ organizations })),
+      setBoundaries: (boudaries) => set(() => ({ boudaries })),
+      setIsBoundariesLoaded: (isBoundariesLoaded) => set(() => ({ isBoundariesLoaded })),
+      setLang: (lang) => set(() => ({ lang })),
+      setInitialized: (initialized) => set(() => ({ initialized })),
+      setAccessibility: (accessibility) => set(() => ({ accessibility })),
+      toggleAccessibility: () => set((state) => ({ accessibility: !state.accessibility })),
+      getSites: () => get().sites,
+      getWaterSheds: () => get().watersheds,
+      getWaterBodies: () => get().waterbodies,
+      getStates: () => get().states,
+      getCounties: () => get().counties,
+      getTowns: () => get().towns,
+      getOrganizations: () => get().organizations,
+      getBoundaries: () => get().boudaries,
+      getIsBoundariesLoaded: () => get().isBoundariesLoaded,
+      getLang: () => get().lang,
+      getQuery: () => get().query,
+      getInitialized: () => get().initialized,
+      getAccessibility: () => get().accessibility
+    }));
+  }
+  var useDataStore = window.__GLOBAL_DATA_STORE__;
+
+  // src/modules/handle-url-queries.js
+  var { setAccessibility } = useDataStore.getState();
+  var querySetMap = {
+    accessibility: setAccessibility
+  };
+  function initQueries() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const parsed = {
+      accessibility: urlParams.get("accessibility") === "1" ? true : false
+    };
+    if (Object.values(parsed).length > 0) {
+      const queryEntries = Object.entries(parsed);
+      queryEntries.forEach(([key, value]) => {
+        querySetMap[key](value);
+      });
+    }
+  }
+
+  // src/handle-query.js
+  if (window.dataInitialized) {
+    initQueries();
+  } else {
+    window.initQueries = initQueries;
+  }
+})();
+//# sourceMappingURL=handle-query.js.map

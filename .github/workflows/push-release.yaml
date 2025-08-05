@@ -47,14 +47,14 @@ jobs:
               uses: egad13/purge-jsdelivr-cache@v1
               with:
                   url: |
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/build-map-filters.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/handle-query.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/init-data.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/process-locs.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/organization-build-map.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/organization-init-data.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/organization-process-locs.js
-                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/organization-handle-query.js
-                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/site-build-site-page.js
-                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/site-init-data.js
-                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@latest/site-process-locs.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/build-map-filters.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/handle-query.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/init-data.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/process-locs.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-build-map.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-init-data.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-process-locs.js
+                      https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-handle-query.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-build-site-page.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-init-data.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-process-locs.js

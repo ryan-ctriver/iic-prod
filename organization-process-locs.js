@@ -1,1 +1,144 @@
-(()=>{var l=t=>{let n,e=new Set,s=(i,d)=>{let a=typeof i=="function"?i(n):i;if(!Object.is(a,n)){let A=n;n=d??(typeof a!="object"||a===null)?a:Object.assign({},n,a),e.forEach(y=>y(n,A))}},o=()=>n,c={setState:s,getState:o,getInitialState:()=>b,subscribe:i=>(e.add(i),()=>e.delete(i))},b=n=t(s,o,c);return c},u=t=>t?l(t):l;window.__GLOBAL_DATA_STORE__||(window.__GLOBAL_DATA_STORE__=u((t,n)=>({sites:[],watersheds:[],waterbodies:[],organizations:[],states:[],counties:[],towns:[],boudaries:{},query:{},isBoundariesLoaded:!1,lang:"en",initialized:!1,accessibility:!1,setSites:e=>t(()=>({sites:e})),setQuery:e=>t(()=>({query:e})),setStates:e=>t(()=>({states:e})),setCounties:e=>t(()=>({counties:e})),setTowns:e=>t(()=>({towns:e})),setWaterSheds:e=>t(()=>({watersheds:e})),setWaterBodies:e=>t(()=>({waterbodies:e})),setOrganizations:e=>t(()=>({organizations:e})),setBoundaries:e=>t(()=>({boudaries:e})),setIsBoundariesLoaded:e=>t(()=>({isBoundariesLoaded:e})),setLang:e=>t(()=>({lang:e})),setInitialized:e=>t(()=>({initialized:e})),setAccessibility:e=>t(()=>({accessibility:e})),toggleAccessibility:()=>t(e=>({accessibility:!e.accessibility})),getSites:()=>n().sites,getWaterSheds:()=>n().watersheds,getWaterBodies:()=>n().waterbodies,getStates:()=>n().states,getCounties:()=>n().counties,getTowns:()=>n().towns,getOrganizations:()=>n().organizations,getBoundaries:()=>n().boudaries,getIsBoundariesLoaded:()=>n().isBoundariesLoaded,getLang:()=>n().lang,getQuery:()=>n().query,getInitialized:()=>n().initialized,getAccessibility:()=>n().accessibility})));var g=window.__GLOBAL_DATA_STORE__;var{setLang:L}=g.getState(),f="lang",S="/es",p="en";function I(t){return t.startsWith(S)}function m(){try{return localStorage.getItem(f)}catch{return null}}function r(t){try{localStorage.setItem(f,t)}catch{}}function z(){let t=navigator.languages||[navigator.language||p];return t.some(e=>e.toLowerCase().startsWith("es"))&&t.findIndex(e=>e.toLowerCase().startsWith("es"))<t.findIndex(e=>e.toLowerCase().startsWith("en"))}function h(t,n,e){let s=t==="/"?"":t,o=`${window.location.origin}${S}${s}${n}${e}`;window.location.replace(o)}function w(){let{pathname:t,search:n,hash:e}=window.location;if(I(t)){L("es");return}let s=m();if(s==="es"){h(t,n,e);return}s||(z()?(r("es"),h(t,n,e)):r("en")),L("en")}function _(){document.querySelectorAll(".lang_link").forEach(n=>{addEventListener("click",B)})}function B(t){console.log("Hadled");let n=t.target.getAttribute("data-lang");n&&r(n)}w();_();})();
+(() => {
+  // bin/live-reload.js
+  new EventSource(`${"http://localhost:3002"}/esbuild`).addEventListener("change", () => location.reload());
+
+  // node_modules/zustand/esm/vanilla.mjs
+  var createStoreImpl = (createState) => {
+    let state;
+    const listeners = /* @__PURE__ */ new Set();
+    const setState = (partial, replace) => {
+      const nextState = typeof partial === "function" ? partial(state) : partial;
+      if (!Object.is(nextState, state)) {
+        const previousState = state;
+        state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+        listeners.forEach((listener) => listener(state, previousState));
+      }
+    };
+    const getState = () => state;
+    const getInitialState = () => initialState;
+    const subscribe = (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    };
+    const api = { setState, getState, getInitialState, subscribe };
+    const initialState = state = createState(setState, getState, api);
+    return api;
+  };
+  var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
+
+  // src/store/data-store.js
+  if (!window.__GLOBAL_DATA_STORE__) {
+    window.__GLOBAL_DATA_STORE__ = createStore((set, get) => ({
+      sites: [],
+      watersheds: [],
+      waterbodies: [],
+      organizations: [],
+      states: [],
+      counties: [],
+      towns: [],
+      boudaries: {},
+      query: {},
+      isBoundariesLoaded: false,
+      lang: "en",
+      initialized: false,
+      accessibility: false,
+      setSites: (sites) => set(() => ({ sites })),
+      setQuery: (query) => set(() => ({ query })),
+      setStates: (states) => set(() => ({ states })),
+      setCounties: (counties) => set(() => ({ counties })),
+      setTowns: (towns) => set(() => ({ towns })),
+      setWaterSheds: (watersheds) => set(() => ({ watersheds })),
+      setWaterBodies: (waterbodies) => set(() => ({ waterbodies })),
+      setOrganizations: (organizations) => set(() => ({ organizations })),
+      setBoundaries: (boudaries) => set(() => ({ boudaries })),
+      setIsBoundariesLoaded: (isBoundariesLoaded) => set(() => ({ isBoundariesLoaded })),
+      setLang: (lang) => set(() => ({ lang })),
+      setInitialized: (initialized) => set(() => ({ initialized })),
+      setAccessibility: (accessibility) => set(() => ({ accessibility })),
+      toggleAccessibility: () => set((state) => ({ accessibility: !state.accessibility })),
+      getSites: () => get().sites,
+      getWaterSheds: () => get().watersheds,
+      getWaterBodies: () => get().waterbodies,
+      getStates: () => get().states,
+      getCounties: () => get().counties,
+      getTowns: () => get().towns,
+      getOrganizations: () => get().organizations,
+      getBoundaries: () => get().boudaries,
+      getIsBoundariesLoaded: () => get().isBoundariesLoaded,
+      getLang: () => get().lang,
+      getQuery: () => get().query,
+      getInitialized: () => get().initialized,
+      getAccessibility: () => get().accessibility
+    }));
+  }
+  var useDataStore = window.__GLOBAL_DATA_STORE__;
+
+  // src/modules/localization-processing.js
+  var { setLang } = useDataStore.getState();
+  var LANG_KEY = "lang";
+  var LOCALIZED_PREFIX = "/es";
+  var DEFAULT_LANG = "en";
+  function isLocalizedPath(pathname) {
+    return pathname.startsWith(LOCALIZED_PREFIX);
+  }
+  function getCachedLang() {
+    try {
+      return localStorage.getItem(LANG_KEY);
+    } catch {
+      return null;
+    }
+  }
+  function setCachedLang(lang) {
+    try {
+      localStorage.setItem(LANG_KEY, lang);
+    } catch {
+    }
+  }
+  function isSpanishPreferred() {
+    const languages = navigator.languages || [navigator.language || DEFAULT_LANG];
+    const isHaveSpanish = languages.some((lang) => lang.toLowerCase().startsWith("es"));
+    return isHaveSpanish && languages.findIndex((lang) => lang.toLowerCase().startsWith("es")) < languages.findIndex((lang) => lang.toLowerCase().startsWith("en"));
+  }
+  function redirectToLocalized(pathname, search, hash) {
+    const normalizedPath = pathname === "/" ? "" : pathname;
+    const newUrl = `${window.location.origin}${LOCALIZED_PREFIX}${normalizedPath}${search}${hash}`;
+    window.location.replace(newUrl);
+  }
+  function handleLanguageRedirect() {
+    const { pathname, search, hash } = window.location;
+    if (isLocalizedPath(pathname)) {
+      setLang("es");
+      return;
+    }
+    const cachedLang = getCachedLang();
+    if (cachedLang === "es") {
+      redirectToLocalized(pathname, search, hash);
+      return;
+    }
+    if (!cachedLang) {
+      if (isSpanishPreferred()) {
+        setCachedLang("es");
+        redirectToLocalized(pathname, search, hash);
+      } else {
+        setCachedLang("en");
+      }
+    }
+    setLang("en");
+  }
+  function handleLocChanger() {
+    const locLinks = document.querySelectorAll(".lang_link");
+    locLinks.forEach((link) => {
+      addEventListener("click", changeLocHandling);
+    });
+  }
+  function changeLocHandling(e) {
+    console.log("Hadled");
+    const loc = e.target.getAttribute("data-lang");
+    if (loc) setCachedLang(loc);
+  }
+
+  // src/process-locs.js
+  handleLanguageRedirect();
+  handleLocChanger();
+})();
+//# sourceMappingURL=process-locs.js.map
