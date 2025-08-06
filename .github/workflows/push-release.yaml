@@ -55,6 +55,6 @@ jobs:
                       https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-init-data.js
                       https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-process-locs.js
                       https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/organization-handle-query.js
-                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-build-site-page.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-build-page.js
                         https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-init-data.js
                         https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-process-locs.js
