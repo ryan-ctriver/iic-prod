@@ -1,1 +1,154 @@
-(()=>{var l=t=>{let n,e=new Set,i=(a,d)=>{let s=typeof a=="function"?a(n):a;if(!Object.is(s,n)){let A=n;n=d??(typeof s!="object"||s===null)?s:Object.assign({},n,s),e.forEach(y=>y(n,A))}},o=()=>n,c={setState:i,getState:o,getInitialState:()=>b,subscribe:a=>(e.add(a),()=>e.delete(a))},b=n=t(i,o,c);return c},u=t=>t?l(t):l;window.__GLOBAL_DATA_STORE__||(window.__GLOBAL_DATA_STORE__=u((t,n)=>({sites:[],currentSite:{},watersheds:[],waterbodies:[],organizations:[],states:[],counties:[],towns:[],boudaries:{},query:{},dischargeData:[],isBoundariesLoaded:!1,lang:"en",initialized:!1,setSites:e=>t(()=>({sites:e})),setCurrentSite:e=>t(()=>({currentSite:e})),setQuery:e=>t(()=>({query:e})),setStates:e=>t(()=>({states:e})),setCounties:e=>t(()=>({counties:e})),setTowns:e=>t(()=>({towns:e})),setWaterSheds:e=>t(()=>({watersheds:e})),setWaterBodies:e=>t(()=>({waterbodies:e})),setOrganizations:e=>t(()=>({organizations:e})),setBoundaries:e=>t(()=>({boudaries:e})),setIsBoundariesLoaded:e=>t(()=>({isBoundariesLoaded:e})),setLang:e=>t(()=>({lang:e})),setInitialized:e=>t(()=>({initialized:e})),setDischargeData:e=>t(()=>({dischargeData:e})),setAccessibility:e=>t(()=>({accessibility:e})),toggleAccessibility:()=>t(e=>({accessibility:!e.accessibility})),getSites:()=>n().sites,getWaterSheds:()=>n().watersheds,getWaterBodies:()=>n().waterbodies,getStates:()=>n().states,getCounties:()=>n().counties,getTowns:()=>n().towns,getOrganizations:()=>n().organizations,getBoundaries:()=>n().boudaries,getIsBoundariesLoaded:()=>n().isBoundariesLoaded,getLang:()=>n().lang,getQuery:()=>n().query,getCurrentSite:()=>n().currentSite,getInitialized:()=>n().initialized,getDischargeData:()=>n().dischargeData,getAccessibility:()=>n().accessibility})));var g=window.__GLOBAL_DATA_STORE__;var{setLang:h}=g.getState(),S="lang",f="/es",p="en";function D(t){return t.startsWith(f)}function I(){try{return localStorage.getItem(S)}catch{return null}}function r(t){try{localStorage.setItem(S,t)}catch{}}function m(){let t=navigator.languages||[navigator.language||p];return t.some(e=>e.toLowerCase().startsWith("es"))&&t.findIndex(e=>e.toLowerCase().startsWith("es"))<t.findIndex(e=>e.toLowerCase().startsWith("en"))}function L(t,n,e){let i=t==="/"?"":t,o=`${window.location.origin}${f}${i}${n}${e}`;window.location.replace(o)}function w(){let{pathname:t,search:n,hash:e}=window.location;if(D(t)){h("es");return}let i=I();if(i==="es"){L(t,n,e);return}i||(m()?(r("es"),L(t,n,e)):r("en")),h("en")}function _(){document.querySelectorAll(".lang_link").forEach(n=>{addEventListener("click",C)})}function C(t){let n=t.target.getAttribute("data-lang");n&&r(n)}w();_();})();
+(() => {
+  // bin/live-reload.js
+  new EventSource(`${"http://localhost:3001"}/esbuild`).addEventListener("change", () => location.reload());
+
+  // node_modules/zustand/esm/vanilla.mjs
+  var createStoreImpl = (createState) => {
+    let state;
+    const listeners = /* @__PURE__ */ new Set();
+    const setState = (partial, replace) => {
+      const nextState = typeof partial === "function" ? partial(state) : partial;
+      if (!Object.is(nextState, state)) {
+        const previousState = state;
+        state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+        listeners.forEach((listener) => listener(state, previousState));
+      }
+    };
+    const getState = () => state;
+    const getInitialState = () => initialState;
+    const subscribe = (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    };
+    const api = { setState, getState, getInitialState, subscribe };
+    const initialState = state = createState(setState, getState, api);
+    return api;
+  };
+  var createStore = (createState) => createState ? createStoreImpl(createState) : createStoreImpl;
+
+  // src/store/data-store.js
+  if (!window.__GLOBAL_DATA_STORE__) {
+    window.__GLOBAL_DATA_STORE__ = createStore((set, get) => ({
+      sites: [],
+      currentSite: {},
+      watersheds: [],
+      waterbodies: [],
+      organizations: [],
+      states: [],
+      counties: [],
+      towns: [],
+      boudaries: {},
+      query: {},
+      dischargeData: [],
+      kdIndex: [],
+      points: [],
+      isBoundariesLoaded: false,
+      lang: "en",
+      initialized: false,
+      setSites: (sites) => set(() => ({ sites })),
+      setCurrentSite: (currentSite) => set(() => ({ currentSite })),
+      setQuery: (query) => set(() => ({ query })),
+      setStates: (states) => set(() => ({ states })),
+      setCounties: (counties) => set(() => ({ counties })),
+      setTowns: (towns) => set(() => ({ towns })),
+      setWaterSheds: (watersheds) => set(() => ({ watersheds })),
+      setWaterBodies: (waterbodies) => set(() => ({ waterbodies })),
+      setOrganizations: (organizations) => set(() => ({ organizations })),
+      setBoundaries: (boudaries) => set(() => ({ boudaries })),
+      setIsBoundariesLoaded: (isBoundariesLoaded) => set(() => ({ isBoundariesLoaded })),
+      setLang: (lang) => set(() => ({ lang })),
+      setInitialized: (initialized) => set(() => ({ initialized })),
+      setDischargeData: (dischargeData) => set(() => ({ dischargeData })),
+      setAccessibility: (accessibility) => set(() => ({ accessibility })),
+      setKdIndex: (kdIndex) => set(() => ({ kdIndex })),
+      setPoints: (points) => set(() => ({ points })),
+      toggleAccessibility: () => set((state) => ({ accessibility: !state.accessibility })),
+      getSites: () => get().sites,
+      getWaterSheds: () => get().watersheds,
+      getWaterBodies: () => get().waterbodies,
+      getStates: () => get().states,
+      getCounties: () => get().counties,
+      getTowns: () => get().towns,
+      getOrganizations: () => get().organizations,
+      getBoundaries: () => get().boudaries,
+      getIsBoundariesLoaded: () => get().isBoundariesLoaded,
+      getLang: () => get().lang,
+      getQuery: () => get().query,
+      getCurrentSite: () => get().currentSite,
+      getInitialized: () => get().initialized,
+      getDischargeData: () => get().dischargeData,
+      getAccessibility: () => get().accessibility,
+      getKdIndex: () => get().kdIndex,
+      getPoints: () => get().points
+    }));
+  }
+  var useDataStore = window.__GLOBAL_DATA_STORE__;
+
+  // src/modules/localization-processing.js
+  var { setLang } = useDataStore.getState();
+  var LANG_KEY = "lang";
+  var LOCALIZED_PREFIX = "/es";
+  var DEFAULT_LANG = "en";
+  function isLocalizedPath(pathname) {
+    return pathname.startsWith(LOCALIZED_PREFIX);
+  }
+  function getCachedLang() {
+    try {
+      return localStorage.getItem(LANG_KEY);
+    } catch {
+      return null;
+    }
+  }
+  function setCachedLang(lang) {
+    try {
+      localStorage.setItem(LANG_KEY, lang);
+    } catch {
+    }
+  }
+  function isSpanishPreferred() {
+    const languages = navigator.languages || [navigator.language || DEFAULT_LANG];
+    const isHaveSpanish = languages.some((lang) => lang.toLowerCase().startsWith("es"));
+    return isHaveSpanish && languages.findIndex((lang) => lang.toLowerCase().startsWith("es")) < languages.findIndex((lang) => lang.toLowerCase().startsWith("en"));
+  }
+  function redirectToLocalized(pathname, search, hash) {
+    const normalizedPath = pathname === "/" ? "" : pathname;
+    const newUrl = `${window.location.origin}${LOCALIZED_PREFIX}${normalizedPath}${search}${hash}`;
+    window.location.replace(newUrl);
+  }
+  function handleLanguageRedirect() {
+    const { pathname, search, hash } = window.location;
+    if (isLocalizedPath(pathname)) {
+      setLang("es");
+      return;
+    }
+    const cachedLang = getCachedLang();
+    if (cachedLang === "es") {
+      redirectToLocalized(pathname, search, hash);
+      return;
+    }
+    if (!cachedLang) {
+      if (isSpanishPreferred()) {
+        setCachedLang("es");
+        redirectToLocalized(pathname, search, hash);
+      } else {
+        setCachedLang("en");
+      }
+    }
+    setLang("en");
+  }
+  function handleLocChanger() {
+    const locLinks = document.querySelectorAll(".lang_link");
+    locLinks.forEach((link) => {
+      addEventListener("click", changeLocHandling);
+    });
+  }
+  function changeLocHandling(e) {
+    const loc = e.target.getAttribute("data-lang");
+    if (loc) setCachedLang(loc);
+  }
+
+  // src/site-process-locs.js
+  handleLanguageRedirect();
+  handleLocChanger();
+})();
+//# sourceMappingURL=site-process-locs.js.map
