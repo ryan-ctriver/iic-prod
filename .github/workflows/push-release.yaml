@@ -59,3 +59,7 @@ jobs:
                         https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-init-data.js
                         https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-handle-query.js
                         https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/site-process-locs.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/volunteering-process-locs.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/volunteering-init-data.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/volunteering-handle-query.js
+                        https://cdn.jsdelivr.net/gh/ryan-ctriver/iic-prod@${{ github.event.inputs.version }}/volunteering-build-zip-search.js
